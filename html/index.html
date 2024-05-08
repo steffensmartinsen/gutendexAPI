@@ -1,0 +1,72 @@
+<!--
+index.html: part of the html package. Contains raw HTML without styling to send to the landing page of the
+service. The page tells the user that there is no functionality at the root level and redirects the user
+to the three endpoints.
+The landing page also contains the documentation in the README.md.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page</title>
+</head>
+<body>
+<h1>Assignment 1</h1>
+<h2>Steffen S. Martinsen</h2>
+<p>There is no functionality at the root level, please see one of the following endpoints:</p>
+<ul>
+    <li><a href="https://prog2005-cloud.onrender.com/librarystats/v1/bookcount/?language=">Bookcount</a></li>
+    <li><a href="https://prog2005-cloud.onrender.com/librarystats/v1/readership/">Readership</a></li>
+    <li><a href="https://prog2005-cloud.onrender.com/librarystats/v1/status">Status</a></li>
+</ul>
+<h1>Documentation:</h1>
+<p>The assignment creates an API that communicates with several APIs to retrieve information.
+    The information varies on the endpoint provided in the URL by the user.
+    <br>The service queries the Gutenberg Library, REST Countries, Language2Country APIs (self hosted).
+    There are three endpoints that supply the user with different information,
+    and can itself take parameters or further endpoints.
+    These endpoints are bookcountHandler, readershipHandler, and statusHandler. <br></p>
+
+<p>
+    The creation of the unique author slice for both bookcountHandlerand readershipHandler
+    attempts to reduce response time by utilizing go routines.
+    <br>However, the query to languages with a large amount of books is still very slow.
+</p>
+<h2>Bookcount</h2>
+<p>
+    Bookhandler recieves an url in the form of <b>https://prog2005-cloud.onrender.com/librarystats/v1/bookhcount/?language={ISO_Code}</b>
+    <br>The <i>{ISO_Code}</i> of the parameter can be any 2-letter ISO code for a country.
+    It extracts this information and queries the Gutenberg Library API to find the relevant information
+    for this language.
+    <br>
+    If the URL provided does not contain a parameter it throws an error asking for a language. The same
+    message is provided if we are at the root <i>bookcount/</i> and if the parameters are empty like <i>bookcount/?language=</i>
+    <br>
+    The endpoint only hanldes GET requests and will provide a message to the client if the request is of another method.
+    The endpoint will read from the Gutenberg library and provide the amoount of books in a given language,<br>
+    how many unique authors have authored the books, and the fraction of books of the given language of the total amount of books.
+    <br>
+</p>
+<h2>Readership</h2>
+<p>
+    Readership recieves an URL in the form of <b>https://prog2005-cloud.onrender.com/librarystats/v1/readership/{ISO_code}/?{limit}</b>
+    <br>The <i>{ISO_Code}</i> is a 2-letter ISO Code for a given country. The <i>{limit}</i> is an optional parameter that can be used to limit the amount of countries returned.
+    <br>If the <i>{ISO_Code}</i> is empty the server will throw an error and ask for a country code from the client.
+    <i>{limit}</i> may be empty, and the server will supply the amount of countries it found for that language.
+    <br>The server queries the Gutenberg Library like the <b>bookcount endpoint</b> and provides the same information of
+    the number of books and authors for a given language. Additionally, it queries the Language2Country API to find
+    the number of countries where the given ISO_Code language is an official language.
+    <br>
+    It then queries the REST Countries API and returns the population of the countries it finds individually to the client,
+    and assumes this is the potential readership of books in this language.
+</p>
+<h2>Status</h2>
+<p>
+    The status endpoint resides at the url address: <b>https://prog2005-cloud.onrender.com/librarystats/v1/status/</b>
+    Statushandler retrieves the status codes from all the APIs the service relies on, along with the version and the uptime of the service.
+    <br>The errors in the endpoint are of log.Fatal so the program moves on. If there are errors on the GET requests
+    we want to return the error message to the client and not return to the client because something failed.
+</p>
+</body>
+</html>
