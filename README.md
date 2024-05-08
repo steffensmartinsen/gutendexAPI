@@ -1,6 +1,6 @@
 # Gutendex Library API
 This was originally the first Assignmnet for [PROG2005 - Cloud Technologies](https://www.ntnu.edu/studies/courses/PROG2005#tab=omEmnet), at NTNU campus Gjøvik.
-The original assignment code is hosted at on [Render](https://prog2005-cloud.onrender.com/)
+The original assignment code is hosted at on [Render](https://prog2005-cloud.onrender.com/).
 
 The service communicates with several other APIs to retrieve information. The information depends on the endpoint provided in the URL by the user. The service queries the Gutenberg Library, REST Countries, and Language2Country APIs (self-hosted by teacher Chrisopher Frantz). There are three endpoints the service serves, which supply the user with different information. The endpoints are: `bookcoun`, `readership`, and `status`. 
 
